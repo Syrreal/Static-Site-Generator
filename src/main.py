@@ -1,8 +1,8 @@
 from textnode import *
 
 def main():
-    a = TextNode("achor text", TextType.LINK_TEXT, "https://www.google.com")
-    b = TextNode("bold text", TextType.BOLD_TEXT)
+    a = TextNode("achor text", TextType.LINK, "https://www.google.com")
+    b = TextNode("bold text", TextType.BOLD)
 
     print(a)
     print(b)
