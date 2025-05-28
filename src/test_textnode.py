@@ -26,9 +26,6 @@ class TestTextNode(unittest.TestCase):
         node = TextNode("Text", TextType.LINK, "https://test.com")
         node2 = TextNode("Text", TextType.LINK)
         self.assertNotEqual(node, node2)
-    
-    
-
 
 if __name__ == "__main__":
     unittest.main()
