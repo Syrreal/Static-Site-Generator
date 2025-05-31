@@ -2,7 +2,7 @@ import unittest
 
 from htmlnode import *
 from textnode import *
-from main import text_node_to_html_node, split_nodes_delimiter
+from main import text_node_to_html_node, split_nodes_delimiter, extract_markdown_images, extract_markdown_links
 
 
 class TestTextToHTML(unittest.TestCase):
@@ -85,6 +85,74 @@ class TestSplitNodesDelimiter(unittest.TestCase):
     # def test_incomplete_blocks(self):
     #     starting_nodes = [TextNode("Text with an incomplete 'code block", TextType.TEXT)]
     #     self.assertRaises(SyntaxError, split_nodes_delimiter, starting_nodes, "'", TextType.CODE)
+
+class TestExtractImages(unittest.TestCase):
+    def test_extract_one_image(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
+    
+    def test_extract_multi_image(self):
+        matches = extract_markdown_images(
+            "This is text with one ![image](https://image.com/image1.gif)" \
+            "and a second ![image2](https://image.com/image2.png)"
+        )
+        self.assertListEqual([("image", "https://image.com/image1.gif"), ("image2", "https://image.com/image2.png")], matches)
+    
+    def test_extract_bad_format(self):
+        matches = extract_markdown_images(
+            "This is a text with ![image](https://image.com/badformat.jpg"
+        )
+        self.assertListEqual([], matches)
+
+    def test_extract_good_and_bad_formats(self):
+        matches = extract_markdown_images(
+            "This is a text with ![image](https://image.com/goodformat.jpg)" \
+            " and ![image2](https://image.com/badformat.gif"
+        )
+        self.assertListEqual([("image", "https://image.com/goodformat.jpg")], matches)
+
+    def test_extract_image_and_link(self):
+        matches = extract_markdown_images(
+            "This is a text with an ![image](https://image.com/image.gif)" \
+            "and a [link](https://link.com/)"
+        )
+        self.assertListEqual([("image", "https://image.com/image.gif")], matches)
+
+class TestExtractLinks(unittest.TestCase):
+    def test_extract_one_link(self):
+        matches = extract_markdown_links(
+            "This is text with an [link](https://link.com)"
+        )
+        self.assertListEqual([("link", "https://link.com")], matches)
+    
+    def test_extract_multi_link(self):
+        matches = extract_markdown_links(
+            "This is text with one [link](https://link.com/link)" \
+            "and a second [link2](https://link.com/link2)"
+        )
+        self.assertListEqual([("link", "https://link.com/link"), ("link2", "https://link.com/link2")], matches)
+    
+    def test_extract_bad_format(self):
+        matches = extract_markdown_links(
+            "This is a text with [link](https://link.com/badformat/"
+        )
+        self.assertListEqual([], matches)
+
+    def test_extract_good_and_bad_formats(self):
+        matches = extract_markdown_links(
+            "This is a text with [link](https://link.com)" \
+            " and ![link2](https://link.com/badformat/"
+        )
+        self.assertListEqual([("link", "https://link.com")], matches)
+
+    def test_extract_image_and_link(self):
+        matches = extract_markdown_links(
+            "This is a text with an ![image](https://image.com/image.gif)" \
+            "and a [link](https://link.com/)"
+        )
+        self.assertListEqual([("link", "https://link.com/")], matches)
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,16 @@
 from textnode import *
 from htmlnode import *
+import re
+
+def extract_markdown_images(text):
+    # Capture as little text between ![ and ]
+    # Capture as little text between ()
+    return re.findall(r"!\[(.+?)\]\((.+?)\)", text)
+
+def extract_markdown_links(text):
+    # Capture as little text between [ and ] that doesnt have a ! in front
+    # Capture as little text between ()
+    return re.findall(r"(?<!!)\[(.+?)\]\((.+?)\)", text)
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
