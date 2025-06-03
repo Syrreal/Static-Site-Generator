@@ -6,7 +6,7 @@ class TestTextToTextNode(unittest.TestCase):
 
     def test_full_text(self):
         text = "This is **text** with an _italic_ word and a `code block` " \
-        "and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        "and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://link.com/)"
         text_nodes = [
             TextNode("This is ", TextType.TEXT),
             TextNode("text", TextType.BOLD),
@@ -17,10 +17,10 @@ class TestTextToTextNode(unittest.TestCase):
             TextNode(" and an ", TextType.TEXT),
             TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
             TextNode(" and a ", TextType.TEXT),
-            TextNode("link", TextType.LINK, "https://boot.dev"),
+            TextNode("link", TextType.LINK, "https://link.com/"),
         ]
         self.assertListEqual(text_nodes, text_to_text_nodes(text))
-    
+
     def test_multiples(self):
         text = "This is **text** with **LOTS** of _different_ formats and " \
         "_multiples_ of *each* format with ![woah](https://image.com/image.gif)![woah](https://image.com/image.gif)" \
