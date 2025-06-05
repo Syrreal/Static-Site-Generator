@@ -11,7 +11,7 @@ class HTMLNode():
     
     def props_to_html(self):
         if self.props:
-            return "".join(list(map(lambda x: f' {x}="{self.props[x]}"', self.props)))
+            return "".join(map(lambda x: f' {x}="{self.props[x]}"', self.props))
 
     def __repr__(self):
         return f'''HTMLNode({self.tag}, {self.value},\n
@@ -45,7 +45,7 @@ class ParentNode(HTMLNode):
             if not self.children:
                 raise ValueError(f'Children required in parent node: {self}')
             else:
-                child_str = ''.join(list(map(lambda x: x.to_html(), self.children)))
+                child_str = ''.join(map(lambda x: x.to_html(), self.children))
                 if self.props:
                     return f'<{self.tag}{self.props_to_html()}>{child_str}</{self.tag}>'
                 else:
