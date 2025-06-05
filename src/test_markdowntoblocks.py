@@ -69,6 +69,20 @@ This is the same paragraph on a new line
                 "- This is another list\n- with more items"
             ],
         )
+    def test_trailing_whitespace(self):
+        md = """
+This is a paragraph
 
+with trailing whitespace
+
+"""
+        blocks = markdown_to_blocks(md)
+        self.assertEqual(
+            blocks,
+            [
+                "This is a paragraph",
+                "with trailing whitespace"
+            ]
+        )
 if __name__ == "__main__":
     unittest.main()
