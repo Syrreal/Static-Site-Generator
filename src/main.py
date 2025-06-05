@@ -30,7 +30,9 @@ def text_node_to_html_node(text_node):
         return LeafNode(None, text_node.text)
 
 def markdown_to_blocks(markdown):
-    return list(map(lambda x: x.strip(), markdown.split("\n\n")))
+    blocks = list(map(lambda x: x.strip(), markdown.split("\n\n")))
+    # Return non-empty blocks
+    return [block for block in blocks if block]
 
 def main():
     a = TextNode("achor text", TextType.LINK, "https://www.google.com")
