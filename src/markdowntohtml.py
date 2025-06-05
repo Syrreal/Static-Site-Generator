@@ -1,7 +1,12 @@
 from blocktype import *
 from htmlnode import *
 from textnode import *
-from main import markdown_to_blocks, text_node_to_html_node, text_to_text_nodes
+from helpers import *
+
+def markdown_to_blocks(markdown):
+    blocks = list(map(lambda x: x.strip(), markdown.split("\n\n")))
+    # Return non-empty blocks
+    return [block for block in blocks if block]
 
 def trim_block(block, block_type) -> list:
     "Function returns a list with elements having type identifiers trimmed"
@@ -88,5 +93,4 @@ def markdown_to_html_node(markdown):
         # Add block to grandparent
         grandparent.children.append(parent)
     return grandparent
-        
             
