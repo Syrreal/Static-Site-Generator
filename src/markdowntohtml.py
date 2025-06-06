@@ -58,7 +58,7 @@ def text_to_children(text):
     if len(text) > 1:
         for node in text:
             # Create a parent <li> tag for each item
-            parent = ParentNode("li")
+            parent = ParentNode("li", [])
             # Convert text to a list of text nodes, then convert text nodes into html nodes
             children = list(map(lambda x: text_node_to_html_node(x), text_to_text_nodes(node)))
             # Add nodes to parent li node
