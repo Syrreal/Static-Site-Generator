@@ -118,5 +118,98 @@ the **same** even with inline stuff
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff</code></pre></div>",
         )
 
+    def test_lists(self):
+        md = """
+- this
+- is
+- an
+- unordered
+- list
+
+1. this
+2. list
+3. is
+4. ordered
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ul><li>this</li><li>is</li><li>an</li><li>unordered</li><li>list</li></ul><ol><li>this</li><li>list</li><li>is</li><li>ordered</li></ol></div>"
+        )
+    
+    def test_quoteblock(self):
+        md = """
+>Block
+>Quote
+> Space
+>   
+>Empty above
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><blockquote>Block Quote  Space\nEmpty above</blockquote></div>"
+        )
+
+    def test_heading(self):
+        md = """
+# This is a heading
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h1>This is a heading</h1></div>"
+        )
+    
+    def test_heading_multi(self):
+        md = """
+# This is a heading
+
+### This is a smaller heading
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h1>This is a heading</h1><h3>This is a smaller heading</h3></div>"
+        )
+
+    def test_all(self):
+        md = """
+# Heading
+
+```
+Code**block
+```
+
+- unordered
+- list
+
+1. ordered
+2. list
+
+>Quote
+
+woah
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h1>Heading</h1><pre><code>Code**block</code></pre><ul><li>unordered</li><li>list</li></ul><ol><li>ordered</li><li>list</li></ol><blockquote>Quote</blockquote><p>woah</p></div>"
+        )
+
+    def test_empty(self):
+        md = """
+"""
+        self.assertRaises(
+            ValueError,
+            markdown_to_html_node,
+            md
+        )
+
 if __name__ == "__main__":
     unittest.main()
