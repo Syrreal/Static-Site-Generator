@@ -44,9 +44,9 @@ def create_parent(block, block_type):
     if block_type == BlockType.CODE:
         return ParentNode("code", None)
     if block_type == BlockType.ORDERED_LIST:
-        return ParentNode("ul", None)
-    if block_type == BlockType.UNORDERED_LIST:
         return ParentNode("ol", None)
+    if block_type == BlockType.UNORDERED_LIST:
+        return ParentNode("ul", None)
     if block_type == BlockType.QUOTE:
         return ParentNode("blockquote", None)
     if block_type == BlockType.PARAGRAPH:
