@@ -28,9 +28,13 @@ def trim_block(block, block_type) -> list:
         return [line[2:] for line in lines if line]
     if block_type == BlockType.QUOTE:
         lines = block.split("\n")
-        # each line will be led with ">"
-        # Rejoin lines with a space rather than a newline
-        return [" ".join([line[1:] for line in lines])]
+        # remove ">" from lines without stripping whitespace, unless line is empty
+        lines = "\n".join(map(lambda x: x[1:] if x[1:].strip() else (''), lines))
+        # Replace single newlines with " "
+        lines = re.sub(r'(?<!\n)\n(?!\n)', ' ', lines)
+        # Replace double newlines with single newlines
+        lines = re.sub(r'\n\n', '\n', lines)
+        return [lines]
     if block_type == BlockType.PARAGRAPH:
         # Replace newlines with spaces
         return [block.replace("\n", " ")]
