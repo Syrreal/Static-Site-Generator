@@ -14,7 +14,7 @@ def trim_block(block, block_type) -> list:
         # Leading # for heading ends at first white space
         # number of #'s = heading size (1-6) for tag
         heading_size = len(block.split(" ")[0])
-        return [block[:heading_size]]
+        return [block[heading_size+1:]]
     if block_type == BlockType.CODE:
         # code will have 3 back ticks on either side
         return [block[3:-3].strip()]
