@@ -4,9 +4,15 @@ from textnode import *
 from helpers import *
 
 def markdown_to_blocks(markdown):
-    blocks = list(map(lambda x: x.strip(), markdown.split("\n\n")))
-    # Return non-empty blocks
-    return [block for block in blocks if block]
+    # split markdown into blocks
+    blocks = map(lambda x: x.strip(), markdown.split("\n\n"))
+    # filter empty blocks and gather into a list
+    blocks = [block for block in blocks if block]
+    # If blocks is not empty return the list, otherwise raise an error
+    if blocks:
+        return blocks
+    raise(ValueError("Cannot parse empty markdown"))
+    
 
 def trim_block(block, block_type) -> list:
     "Function returns a list with elements having type identifiers trimmed"
