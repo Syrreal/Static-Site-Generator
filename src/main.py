@@ -90,8 +90,9 @@ def get_content(source, dest, basepath):
 def main():
     # set basepath, default is the root directory
     basepath = "/"
-    if sys.argv[0]:
-        basepath = sys.argv[0]
+    if sys.argv[1]:
+        basepath = sys.argv[1]
+    print(basepath)
 
     # Copy static files
     copy_source_to_dest("./static", global_destination_path)
