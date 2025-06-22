@@ -44,6 +44,7 @@ def split_nodes_image(old_nodes):
             for element in split_text:
                 # if element is a tuple, its an image otherwise its regular text
                 if isinstance(element, tuple):
+                    print(f'Image generated {element}')
                     new_nodes.append(TextNode(element[0], TextType.IMAGE, element[1]))
                 else:
                     new_nodes.append(TextNode(element, TextType.TEXT))
@@ -136,7 +137,7 @@ def text_node_to_html_node(text_node):
     if text_node.text_type == TextType.CODE:
         return LeafNode("code", text_node.text)
     if text_node.text_type == TextType.IMAGE:
-        return LeafNode("img", None, {"src": text_node.url, "alt": text_node.text})
+        return LeafNode("img", text_node.text, {"src": text_node.url})
     if text_node.text_type == TextType.ITALIC:
         return LeafNode("i", text_node.text)
     if text_node.text_type == TextType.LINK:
