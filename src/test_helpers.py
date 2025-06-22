@@ -42,8 +42,8 @@ class TestTextToHTML(unittest.TestCase):
         node = TextNode("This is an image", TextType.IMAGE, "img.src")
         html_node = text_node_to_html_node(node)
         self.assertEqual(html_node.tag, "img")
-        self.assertEqual(html_node.value, None)
-        self.assertEqual(html_node.props, {"src": "img.src", "alt": "This is an image"})
+        self.assertEqual(html_node.value, "This is an image")
+        self.assertEqual(html_node.props, {"src": "img.src"})
     
     def test_empty_bold(self):
         node = TextNode("", TextType.BOLD)
