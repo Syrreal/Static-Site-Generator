@@ -44,7 +44,6 @@ def split_nodes_image(old_nodes):
             for element in split_text:
                 # if element is a tuple, its an image otherwise its regular text
                 if isinstance(element, tuple):
-                    print(f'Image generated {element}')
                     new_nodes.append(TextNode(element[0], TextType.IMAGE, element[1]))
                 else:
                     new_nodes.append(TextNode(element, TextType.TEXT))
