@@ -2,7 +2,7 @@ import unittest
 
 from htmlnode import *
 from textnode import *
-from main import *
+from markdowntohtml import *
 
 
 class TestTextToHTML(unittest.TestCase):
