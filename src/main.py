@@ -2,13 +2,14 @@ import shutil
 import pathlib
 import re
 import os
+import sys
 
 from markdowntohtml import markdown_to_html_node
 
 global_template_path = "./template.html"
-global_destination_path = "./public"
+global_destination_path = "./docs"
 
-def move_children(source, dest, page_generation=False):
+def move_children(source, dest, basepath="/", page_generation=False):
     print(f'Checking for children in: {source}')
     for child in os.listdir(source):
         # if child is dir - update path, check for grandchildren
@@ -17,14 +18,14 @@ def move_children(source, dest, page_generation=False):
         if os.path.isdir(child_dir):
             print(f'    Child({child_dir}) is directory, making directory in destination: {dest_dir}')
             os.mkdir(dest_dir)
-            move_children(child_dir, dest_dir, page_generation)
+            move_children(child_dir, dest_dir, basepath, page_generation)
         # If child is file - add file to destination dir
         else:
             print(f'    Child({child_dir}) is file, moving file to destination {dest_dir}')
             # if page generation flag is set, convert md files to html isntead of doing a simple copy
             if page_generation:
                 if child_dir[-3:] == ".md":
-                    generate_page(child_dir, global_template_path, dest_dir)
+                    generate_page(child_dir, global_template_path, dest_dir, basepath)
                     return   
             # copy content from source to destination
             shutil.copy(child_dir, dest_dir)
@@ -55,7 +56,7 @@ def extract_title(markdown):
         raise ValueError("Markdown missing h1 header")
     return title[0].removeprefix("#").strip()
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f'Generating page from "{from_path}" to "{dest_path}" using "{template_path}"')
     md = None
     template = None
@@ -68,6 +69,8 @@ def generate_page(from_path, template_path, dest_path):
     html = markdown_to_html_node(md).to_html()
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
+    template = template.replace('href="/', f'href="{basepath}')
+    template = template.replace('src="/', f'src="{basepath}')
     print("Creating destination path")
     # Remove file from dest_path before creating parent directory(s)
     parent_path = os.path.dirname(dest_path)
@@ -81,14 +84,19 @@ def generate_page(from_path, template_path, dest_path):
         dest.write(template)
     print("Finished -----------------------")
 
-def get_content(source, dest):
-    move_children(source, dest, page_generation=True)
+def get_content(source, dest, basepath):
+    move_children(source, dest, basepath, page_generation=True)
 
 def main():
+    # set basepath, default is the root directory
+    basepath = "/"
+    if sys.argv[0]:
+        basepath = sys.argv[0]
+
     # Copy static files
     copy_source_to_dest("./static", global_destination_path)
     # move content
-    get_content("./content", global_destination_path)
+    get_content("./content", global_destination_path, basepath)
 
 if __name__ == "__main__":
     main()
