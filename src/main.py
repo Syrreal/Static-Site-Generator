@@ -5,7 +5,10 @@ import os
 
 from markdowntohtml import markdown_to_html_node
 
-def move_children(source, dest):
+global_template_path = "./template.html"
+global_destination_path = "./public"
+
+def move_children(source, dest, page_generation=False):
     print(f'Checking for children in: {source}')
     for child in os.listdir(source):
         # if child is dir - update path, check for grandchildren
@@ -14,10 +17,15 @@ def move_children(source, dest):
         if os.path.isdir(child_dir):
             print(f'    Child({child_dir}) is directory, making directory in destination: {dest_dir}')
             os.mkdir(dest_dir)
-            move_children(child_dir, dest_dir)
+            move_children(child_dir, dest_dir, page_generation)
         # If child is file - add file to destination dir
         else:
             print(f'    Child({child_dir}) is file, moving file to destination {dest_dir}')
+            # if page generation flag is set, convert md files to html isntead of doing a simple copy
+            if page_generation:
+                if child_dir[-3:] == ".md":
+                    generate_page(child_dir, global_template_path, dest_dir)
+                    return   
             # copy content from source to destination
             shutil.copy(child_dir, dest_dir)
 
@@ -63,16 +71,24 @@ def generate_page(from_path, template_path, dest_path):
     print("Creating destination path")
     # Remove file from dest_path before creating parent directory(s)
     parent_path = os.path.dirname(dest_path)
+    # Update extensions from .md to .html
+    filepath, ext = os.path.splitext(dest_path)
+    new_file = filepath + ".html"
     pathlib.Path(parent_path).mkdir(parents=True, exist_ok=True)
     print("Writing content to dest")
-    with open(dest_path, "+x") as dest:
+    with open(new_file, "+x") as dest:
         # write our overridden template file to destination
         dest.write(template)
     print("Finished -----------------------")
 
+def get_content(source, dest):
+    move_children(source, dest, page_generation=True)
+
 def main():
-    copy_source_to_dest("./static", "./public")
-    generate_page("./content/index.md", "./template.html", "./public/index.html")
+    # Copy static files
+    copy_source_to_dest("./static", global_destination_path)
+    # move content
+    get_content("./content", global_destination_path)
 
 if __name__ == "__main__":
     main()
