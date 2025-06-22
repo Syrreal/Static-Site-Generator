@@ -1,7 +1,7 @@
-from markdowntohtml import *
 import os
 import shutil
 import pathlib
+import re
 
 def move_children(source, dest):
     print(f'Checking for children in: {source}')
@@ -38,6 +38,11 @@ def copy_source_to_dest(source, dest):
     print("Moving tree -----------")
     move_children(source, dest)
 
+def extract_title(markdown):
+    title = re.findall(r"(?<!#)#{1}(?!#)[^#].*", markdown)
+    if not title:
+        raise ValueError("Markdown missing h1 header")
+    return title[0].removeprefix("#").strip()
 
 def main():
     pass
