@@ -150,7 +150,7 @@ the **same** even with inline stuff
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><blockquote>Block Quote  Space\nEmpty above</blockquote></div>"
+            "<div><blockquote>Block Quote Space\nEmpty above</blockquote></div>"
         )
 
     def test_heading(self):

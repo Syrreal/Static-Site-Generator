@@ -34,8 +34,8 @@ def trim_block(block, block_type) -> list:
         return [line[2:] for line in lines if line]
     if block_type == BlockType.QUOTE:
         lines = block.split("\n")
-        # remove ">" from lines without stripping whitespace, unless line is empty
-        lines = "\n".join(map(lambda x: x[1:] if x[1:].strip() else (''), lines))
+        # remove ">" from lines and strip whitespace
+        lines = "\n".join(map(lambda x: x[1:].strip(), lines))
         # Replace single newlines with " "
         lines = re.sub(r'(?<!\n)\n(?!\n)', ' ', lines)
         # Replace double newlines with single newlines
