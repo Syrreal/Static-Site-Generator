@@ -62,9 +62,7 @@ def generate_page(from_path, template_path, dest_path):
     template = template.replace("{{ Content }}", html)
     print("Creating destination path")
     # Remove file from dest_path before creating parent directory(s)
-    # re.split leaves an empty string in this case so we filter it out before assigning variables
-    parent_path, filename = filter(None, re.split(r"\/([\w\_\-\s]*\.[\w]*)", dest_path))
-
+    parent_path = os.path.dirname(dest_path)
     pathlib.Path(parent_path).mkdir(parents=True, exist_ok=True)
     print("Writing content to dest")
     with open(dest_path, "+x") as dest:
